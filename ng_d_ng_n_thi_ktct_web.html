@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hành Trình Ôn Thi KTCT Mác - Lênin</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- React 18 & ReactDOM CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  
+  <!-- Babel Standalone CDN for in-browser JSX compiling -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #fff5f7;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .animate-fade-in-up { animation: fadeInUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+  </style>
+</head>
+<body class="selection:bg-pink-200 text-slate-800">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // ==========================================
+    // DỮ LIỆU BÀI HỌC - CHƯƠNG 1 (30 CÂU)
+    // ==========================================
+    const CHAPTERS_DATA = [
+      {
+        id: 1,
+        title: "Chương 1: Đối tượng, phương pháp nghiên cứu và chức năng",
+        summary: [
+          "KTCT xuất hiện năm 1615 (A. Montchrétien), trở thành hệ thống lý luận thế kỷ XVIII (A. Smith).",
+          "Đối tượng nghiên cứu: Các quan hệ xã hội của sản xuất và trao đổi trong mối liên hệ với LLSX và KTTT.",
+          "Phương pháp chủ yếu: Trừu tượng hóa khoa học.",
+          "Chức năng: Nhận thức, Thực tiễn, Tư tưởng, Phương pháp luận."
+        ],
+        questions: [
+          // --- NHẬN BIẾT (10 CÂU) ---
+          {
+            id: 'c1_nb1', type: 'nhan_biet',
+            text: 'Thuật ngữ khoa học kinh tế chính trị xuất hiện lần đầu tiên vào năm nào?',
+            options: ['1615', '1776', '1818', '1867'],
+            correct: 0,
+            explanation: 'ĐÚNG: Thuật ngữ này xuất hiện năm 1615 trong tác phẩm Chuyên luận về kinh tế chính trị của Autoine de Montchrétien. SAI: Các năm khác là các cột mốc của Adam Smith hoặc C.Mác.',
+            ref: 'Mục I. Khái quát sự hình thành...'
+          },
+          {
+            id: 'c1_nb2', type: 'nhan_biet',
+            text: 'Ai là người chính thức biến kinh tế chính trị thành môn học với các phạm trù, khái niệm chuyên ngành?',
+            options: ['Autoine de Montchrétien', 'Adam Smith', 'David Ricardo', 'Karl Marx'],
+            correct: 1,
+            explanation: 'ĐÚNG: Tới thế kỷ XVIII, với sự xuất hiện hệ thống lý luận của Adam Smith, kinh tế chính trị chính thức trở thành môn học. SAI: Montchrétien chỉ mới phác thảo, Ricardo và Marx phát triển sau đó.',
+            ref: 'Mục I. Khái quát sự hình thành...'
+          },
+          {
+            id: 'c1_nb3', type: 'nhan_biet',
+            text: 'Chủ nghĩa trọng thương xác định nguồn gốc của lợi nhuận từ đâu?',
+            options: ['Từ sản xuất nông nghiệp', 'Từ bóc lột sức lao động', 'Từ thương nghiệp, thông qua mua rẻ bán đắt', 'Từ công nghiệp cơ khí'],
+            correct: 2,
+            explanation: 'ĐÚNG: Chủ nghĩa trọng thương lý giải nguồn gốc lợi nhuận là từ thương nghiệp, thông qua việc mua rẻ, bán đắt. SAI: Trọng nông hướng vào nông nghiệp, Mác hướng vào sản xuất.',
+            ref: 'Mục I. Khái quát sự hình thành...'
+          },
+          {
+            id: 'c1_nb4', type: 'nhan_biet',
+            text: 'Đối tượng nghiên cứu của chủ nghĩa trọng nông là gì?',
+            options: ['Lĩnh vực lưu thông', 'Lĩnh vực sản xuất nông nghiệp', 'Nền sản xuất tư bản chủ nghĩa nói chung', 'Hành vi người tiêu dùng'],
+            correct: 1,
+            explanation: 'ĐÚNG: Chủ nghĩa trọng nông hướng việc nghiên cứu vào lĩnh vực sản xuất (nông nghiệp). SAI: Lưu thông là của trọng thương.',
+            ref: 'Mục I. Khái quát sự hình thành...'
+          },
+          {
+            id: 'c1_nb5', type: 'nhan_biet',
+            text: 'Đối tượng nghiên cứu của kinh tế chính trị Mác - Lênin là gì?',
+            options: ['Các quan hệ xã hội của sản xuất và trao đổi', 'Biểu hiện kỹ thuật của sản xuất', 'Cách thức làm giàu của các cá nhân', 'Yếu tố vật chất của lực lượng sản xuất'],
+            correct: 0,
+            explanation: 'ĐÚNG: Đối tượng là các quan hệ xã hội của sản xuất và trao đổi gắn với LLSX và KTTT tương ứng. SAI: KTCT không nghiên cứu biểu hiện kỹ thuật hay vật chất của LLSX.',
+            ref: 'Mục II.1. Đối tượng nghiên cứu...'
+          },
+          {
+            id: 'c1_nb6', type: 'nhan_biet',
+            text: 'Phương pháp nghiên cứu chủ yếu và đặc thù của kinh tế chính trị Mác - Lênin là gì?',
+            options: ['Thống kê, mô hình hóa', 'Trừu tượng hóa khoa học', 'Quy nạp diễn dịch', 'Khảo sát thực tiễn'],
+            correct: 1,
+            explanation: 'ĐÚNG: Phương pháp trừu tượng hóa khoa học được sử dụng như một phương pháp chủ yếu của kinh tế chính trị Mác - Lênin. SAI: Các phương pháp khác có dùng nhưng không phải là đặc thù, chủ yếu nhất.',
+            ref: 'Mục II.3. Phương pháp nghiên cứu...'
+          },
+          {
+            id: 'c1_nb7', type: 'nhan_biet',
+            text: 'Chức năng nào của KTCT cung cấp hệ thống tri thức lý luận về sự vận động của các quan hệ giữa người với người trong sản xuất?',
+            options: ['Chức năng nhận thức', 'Chức năng thực tiễn', 'Chức năng tư tưởng', 'Chức năng phương pháp luận'],
+            correct: 0,
+            explanation: 'ĐÚNG: Chức năng nhận thức cung cấp hệ thống tri thức lý luận. SAI: Thực tiễn là cải tạo xã hội; Tư tưởng là xây dựng niềm tin; PP luận là nền tảng cho khoa học khác.',
+            ref: 'Mục III.1. Chức năng nhận thức'
+          },
+          {
+            id: 'c1_nb8', type: 'nhan_biet',
+            text: 'Chức năng nào góp phần xây dựng nền tảng tư tưởng, củng cố niềm tin cho sự phấn đấu vì mục tiêu dân giàu nước mạnh?',
+            options: ['Chức năng nhận thức', 'Chức năng thực tiễn', 'Chức năng tư tưởng', 'Chức năng phương pháp luận'],
+            correct: 2,
+            explanation: 'ĐÚNG: Chức năng tư tưởng góp phần xây dựng lý tưởng khoa học, củng cố niềm tin.',
+            ref: 'Mục III.3. Chức năng tư tưởng'
+          },
+          {
+            id: 'c1_nb9', type: 'nhan_biet',
+            text: 'Quy luật kinh tế là gì?',
+            options: ['Là quy định chủ quan của nhà nước', 'Là mối liên hệ phản ánh bản chất, khách quan, lặp đi lặp lại của các hiện tượng kinh tế', 'Là chính sách kinh tế trong từng thời kỳ', 'Là các nguyên tắc đạo đức trong kinh doanh'],
+            correct: 1,
+            explanation: 'ĐÚNG: Quy luật kinh tế là những mối liên hệ phản ánh bản chất, khách quan, lặp đi lặp lại. SAI: Chính sách kinh tế là sản phẩm chủ quan của con người.',
+            ref: 'Mục II.2. Mục đích nghiên cứu...'
+          },
+          {
+            id: 'c1_nb10', type: 'nhan_biet',
+            text: 'Bộ Tư bản của C.Mác trình bày một cách khoa học các phạm trù của nền kinh tế nào?',
+            options: ['Kinh tế tự nhiên', 'Kinh tế thị trường tư bản chủ nghĩa', 'Kinh tế xã hội chủ nghĩa', 'Kinh tế hỗn hợp'],
+            correct: 1,
+            explanation: 'ĐÚNG: Bộ Tư bản trình bày các phạm trù cơ bản của nền kinh tế thị trường tư bản chủ nghĩa.',
+            ref: 'Mục I. Khái quát sự hình thành...'
+          },
+
+          // --- HIỂU (10 CÂU) ---
+          {
+            id: 'c1_h1', type: 'hieu',
+            text: 'Điểm tiến bộ của Kinh tế chính trị cổ điển Anh so với Chủ nghĩa trọng thương là gì?',
+            options: ['Nghiên cứu về nền sản xuất hàng hóa nói chung', 'Phát hiện giá trị thặng dư', 'Chuyển đối tượng nghiên cứu từ lĩnh vực lưu thông sang lĩnh vực sản xuất', 'Đề cao vai trò của nhà nước'],
+            correct: 2,
+            explanation: 'ĐÚNG: KTCT cổ điển Anh và trọng nông đã chuyển nghiên cứu từ lưu thông sang sản xuất, rút ra quy luật giá trị do hao phí lao động tạo ra. SAI: Trọng thương chỉ chú trọng lưu thông.',
+            ref: 'Mục I. Khái quát sự hình thành...'
+          },
+          {
+            id: 'c1_h2', type: 'hieu',
+            text: 'Theo C.Mác, vì sao kinh tế chính trị không nghiên cứu biểu hiện kỹ thuật của sự sản xuất?',
+            options: ['Vì kỹ thuật đã có các môn khoa học tự nhiên nghiên cứu', 'Vì nó tập trung vào hệ thống các quan hệ xã hội của sản xuất và trao đổi', 'Vì kỹ thuật không ảnh hưởng đến kinh tế', 'Vì C.Mác không am hiểu về kỹ thuật'],
+            correct: 1,
+            explanation: 'ĐÚNG: KTCT Mác-Lênin nghiên cứu mặt xã hội (quan hệ giữa người với người), không nghiên cứu mặt kỹ thuật (vật chất) của sản xuất.',
+            ref: 'Mục II.1. Đối tượng nghiên cứu...'
+          },
+          {
+            id: 'c1_h3', type: 'hieu',
+            text: 'Bản chất của phương pháp "Trừu tượng hóa khoa học" là gì?',
+            options: ['Loại bỏ các yếu tố ngẫu nhiên, bề ngoài để giữ lại những yếu tố bền vững, bản chất', 'Thu thập thật nhiều số liệu thống kê để tìm ra quy luật', 'So sánh kinh tế các nước khác nhau', 'Mô phỏng nền kinh tế bằng toán học'],
+            correct: 0,
+            explanation: 'ĐÚNG: Trừu tượng hóa khoa học là cách gạt bỏ các yếu tố ngẫu nhiên, tạm thời trên bề mặt để tách ra hiện tượng bền vững, bản chất.',
+            ref: 'Mục II.3. Phương pháp nghiên cứu...'
+          },
+          {
+            id: 'c1_h4', type: 'hieu',
+            text: 'Sự khác biệt căn bản giữa "Quy luật kinh tế" và "Chính sách kinh tế" là gì?',
+            options: ['Quy luật kinh tế do nhà nước ban hành, chính sách kinh tế do thị trường quyết định', 'Quy luật kinh tế mang tính khách quan, chính sách kinh tế là sản phẩm chủ quan của con người', 'Không có sự khác biệt, chúng là một', 'Chính sách kinh tế tồn tại vĩnh viễn, quy luật kinh tế có thể thay đổi'],
+            correct: 1,
+            explanation: 'ĐÚNG: Quy luật KT tồn tại khách quan không phụ thuộc ý chí con người. Chính sách KT được ban hành chủ quan dựa trên việc nhận thức quy luật.',
+            ref: 'Hộp 1.2. Quy luật kinh tế và chính sách kinh tế'
+          },
+          {
+            id: 'c1_h5', type: 'hieu',
+            text: 'Mục đích nghiên cứu cao nhất của kinh tế chính trị Mác-Lênin là gì?',
+            options: ['Hướng dẫn cách làm giàu nhanh chóng cho các cá nhân', 'Phát hiện ra các quy luật chi phối quan hệ giữa người với người, tạo động lực thúc đẩy văn minh xã hội', 'Mô tả chi tiết cấu trúc của máy móc thiết bị', 'Đề xuất các phương pháp tính toán GDP'],
+            correct: 1,
+            explanation: 'ĐÚNG: Mục đích là phát hiện quy luật chi phối quan hệ lợi ích, từ đó tạo động lực thúc đẩy sự giàu có và văn minh xã hội.',
+            ref: 'Mục II.2. Mục đích nghiên cứu...'
+          },
+          {
+            id: 'c1_h6', type: 'hieu',
+            text: 'Khái niệm "Kinh tế chính trị theo nghĩa rộng" theo quan điểm của Ph.Ăngghen được hiểu thế nào?',
+            options: ['Là môn khoa học duy nhất cho tất cả các nước ở mọi thời đại', 'Là khoa học về quy luật chi phối sản xuất/trao đổi tư liệu sinh hoạt ở mọi giai đoạn lịch sử', 'Là khoa học chỉ nghiên cứu CNTB', 'Là khoa học kết hợp cả chính trị học và kinh tế học'],
+            correct: 1,
+            explanation: 'ĐÚNG: Nghĩa rộng là khoa học về quy luật chi phối sản xuất và trao đổi trong toàn bộ lịch sử xã hội loài người.',
+            ref: 'Mục II.1. Đối tượng nghiên cứu...'
+          },
+          {
+            id: 'c1_h7', type: 'hieu',
+            text: 'Vì sao nói KTCT Mác-Lênin thực hiện chức năng "phương pháp luận"?',
+            options: ['Vì nó cung cấp các công thức toán học để tính toán', 'Vì nó là nền tảng lý luận khoa học giúp nhận diện sâu hơn nội hàm các phạm trù của các khoa học kinh tế chuyên ngành khác', 'Vì nó dạy cách thực hành kinh doanh', 'Vì nó thay thế hoàn toàn các môn quản trị kinh doanh'],
+            correct: 1,
+            explanation: 'ĐÚNG: KTCT đóng vai trò là nền tảng lý luận chung để từ đó học các môn kinh tế chuyên ngành một cách gốc rễ.',
+            ref: 'Mục III.4. Chức năng phương pháp luận'
+          },
+          {
+            id: 'c1_h8', type: 'hieu',
+            text: 'Đóng góp lớn nhất, tạo ra "bước nhảy vọt" của C.Mác so với D.Ricardo trong lý luận kinh tế là gì?',
+            options: ['Phát hiện ra tính hai mặt của lao động sản xuất hàng hóa', 'Sáng tạo ra thuật ngữ Kinh tế chính trị', 'Ủng hộ chủ nghĩa trọng thương', 'Khẳng định giá trị do hao phí lao động tạo ra'],
+            correct: 0,
+            explanation: 'ĐÚNG: C.Mác là người đầu tiên phát hiện ra tính 2 mặt của lao động (cụ thể & trừu tượng), tạo tiền đề giải quyết học thuyết giá trị thặng dư.',
+            ref: 'Mục I. Khái quát sự hình thành...'
+          },
+          {
+            id: 'c1_h9', type: 'hieu',
+            text: 'Khi ban hành một chính sách kinh tế không phù hợp, dẫn đến sản xuất đình trệ, kết luận nào sau đây đúng?',
+            options: ['Quy luật kinh tế đã bị sai', 'Chính sách đó đã đi ngược lại quy luật kinh tế khách quan', 'Con người đã tiêu diệt được quy luật kinh tế', 'Thị trường tự động sinh ra quy luật mới'],
+            correct: 1,
+            explanation: 'ĐÚNG: Quy luật luôn khách quan. Chính sách chủ quan nếu không nhận thức đúng quy luật sẽ gây hậu quả tiêu cực.',
+            ref: 'Hộp 1.2. Quy luật kinh tế và chính sách kinh tế'
+          },
+          {
+            id: 'c1_h10', type: 'hieu',
+            text: 'Khi xác định đối tượng nghiên cứu, kinh tế chính trị Mác - Lênin đặt các quan hệ xã hội của sản xuất và trao đổi trong mối liên hệ biện chứng với yếu tố nào?',
+            options: ['Lực lượng sản xuất và kiến trúc thượng tầng tương ứng', 'Triết học và chủ nghĩa xã hội khoa học', 'Cung và Cầu', 'Tự nhiên và môi trường'],
+            correct: 0,
+            explanation: 'ĐÚNG: Quan hệ SX không tồn tại độc lập mà bị chi phối bởi trình độ LLSX và kiến trúc thượng tầng tương ứng.',
+            ref: 'Mục II.1. Đối tượng nghiên cứu...'
+          },
+
+          // --- VẬN DỤNG (10 CÂU) ---
+          {
+            id: 'c1_vd1', type: 'van_dung',
+            text: 'Một sinh viên vận dụng kiến thức KTCT để nhận diện vai trò, trách nhiệm của bản thân khi tham gia hoạt động kinh tế, góp phần phát triển đất nước. Sinh viên đó đang thụ hưởng chức năng nào của KTCT?',
+            options: ['Chức năng nhận thức', 'Chức năng thực tiễn', 'Chức năng phương pháp luận', 'Chức năng tư tưởng'],
+            correct: 1,
+            explanation: 'ĐÚNG: Vận dụng quy luật vào thực tiễn hoạt động lao động, tạo động lực phát triển là biểu hiện của chức năng thực tiễn.',
+            ref: 'Mục III.2. Chức năng thực tiễn'
+          },
+          {
+            id: 'c1_vd2', type: 'van_dung',
+            text: 'Nhà nước ban hành Luật Đầu tư, trong đó quy định giảm thuế cho doanh nghiệp ứng dụng công nghệ cao. Hành động này phản ánh mối quan hệ nào trong đối tượng nghiên cứu của KTCT?',
+            options: ['Tác động của kiến trúc thượng tầng (nhà nước, luật pháp) đối với quan hệ sản xuất và trao đổi', 'Tác động của tự nhiên đối với LLSX', 'Sự phát triển thuần túy của kỹ thuật', 'Sự xóa bỏ quy luật khách quan'],
+            correct: 0,
+            explanation: 'ĐÚNG: Luật Đầu tư, Thuế (Kiến trúc thượng tầng) được nhà nước dùng để điều chỉnh quan hệ lợi ích/trao đổi nhằm thúc đẩy LLSX.',
+            ref: 'Mục II.1. Đối tượng nghiên cứu...'
+          },
+          {
+            id: 'c1_vd3', type: 'van_dung',
+            text: 'Khi nghiên cứu về "Tiền tệ", nếu một môn học tập trung vào cách ghi chép sổ sách lượng tiền thu chi, môn học đó là Kế toán. Nếu tập trung vào cội nguồn bản chất của Tiền phản ánh quan hệ xã hội nào, môn học đó là:',
+            options: ['Kinh tế vi mô', 'Tài chính doanh nghiệp', 'Kinh tế chính trị Mác - Lênin', 'Kinh tế lượng'],
+            correct: 2,
+            explanation: 'ĐÚNG: KTCT Mác-Lênin nghiên cứu bản chất, cội nguồn của các hiện tượng, đóng vai trò phương pháp luận.',
+            ref: 'Mục III.4. Chức năng phương pháp luận'
+          },
+          {
+            id: 'c1_vd4', type: 'van_dung',
+            text: 'Việc tách bỏ các yếu tố tình cảm cá nhân khi nghiên cứu một giao dịch mua bán giữa hai doanh nghiệp để tập trung vào lợi ích kinh tế là biểu hiện của phương pháp nào?',
+            options: ['Quy nạp', 'Diễn dịch', 'Trừu tượng hóa khoa học', 'Mô hình hóa toán học'],
+            correct: 2,
+            explanation: 'ĐÚNG: Việc gạt bỏ các yếu tố tình cảm ngẫu nhiên để giữ lại yếu tố bản chất (quan hệ lợi ích kinh tế) chính là trừu tượng hóa khoa học.',
+            ref: 'Mục II.3. Phương pháp nghiên cứu...'
+          },
+          {
+            id: 'c1_vd5', type: 'van_dung',
+            text: 'Doanh nghiệp A chạy theo lợi nhuận bất chấp xả thải ra môi trường. Nhà hoạch định chính sách cần dùng công cụ gì để điều chỉnh hành vi này dựa trên nhận thức KTCT?',
+            options: ['Đợi quy luật kinh tế tự trừng phạt', 'Dùng chính sách kinh tế (luật pháp, thuế, phạt) để tác động vào quan hệ lợi ích của doanh nghiệp A', 'Kêu gọi đạo đức suông', 'Cấm hoàn toàn sản xuất'],
+            correct: 1,
+            explanation: 'ĐÚNG: Quy luật tác động qua lợi ích. Nhà nước dùng chính sách can thiệp vào lợi ích kinh tế để điều chỉnh hành vi.',
+            ref: 'Hộp 1.2 và Mục III.2'
+          },
+          {
+            id: 'c1_vd6', type: 'van_dung',
+            text: 'Từ lịch sử các trường phái KTCT, bài học lớn nhất rút ra cho tư duy kinh tế đương đại là gì?',
+            options: ['Các lý thuyết cũ luôn sai hoàn toàn', 'Chỉ có lý thuyết của Mác là duy nhất có giá trị', 'Khoa học kinh tế là quá trình kế thừa sáng tạo, điều kiện thay đổi đòi hỏi lý luận phải phát triển', 'Kinh tế học không có sự kế thừa'],
+            correct: 2,
+            explanation: 'ĐÚNG: Khái quát lịch sử cho thấy các lý thuyết phản ánh trình độ của từng giai đoạn và không ngừng được kế thừa, hoàn thiện.',
+            ref: 'Mục I. Khái quát sự hình thành...'
+          },
+          {
+            id: 'c1_vd7', type: 'van_dung',
+            text: 'Một sinh viên có niềm tin mãnh liệt vào con đường xây dựng chế độ xã hội tốt đẹp, công bằng, văn minh nhờ hiểu rõ quy luật vận động của CNTB. Sinh viên này đã thụ hưởng kết quả từ chức năng nào?',
+            options: ['Chức năng nhận thức', 'Chức năng tư tưởng', 'Chức năng thực tiễn', 'Chức năng phương pháp luận'],
+            correct: 1,
+            explanation: 'ĐÚNG: Xây dựng niềm tin, lý tưởng khoa học và tiến bộ xã hội là biểu hiện trực tiếp của chức năng Tư tưởng.',
+            ref: 'Mục III.3. Chức năng tư tưởng'
+          },
+          {
+            id: 'c1_vd8', type: 'van_dung',
+            text: 'Khi quan sát hiện tượng "giá thịt lợn tăng cao dịp Tết", nếu chỉ thấy thiếu hàng thì đó là nhận thức bề mặt. KTCT giúp tìm ra bản chất ẩn sau là gì?',
+            options: ['Quy luật giá trị và quan hệ lợi ích giữa người chăn nuôi và người tiêu dùng', 'Khả năng sinh sản của vật nuôi', 'Lỗi của thời tiết', 'Tâm lý thích ăn thịt lợn'],
+            correct: 0,
+            explanation: 'ĐÚNG: KTCT đi qua các hiện tượng bề mặt để tìm ra quy luật chi phối (quy luật giá trị, cung cầu) và mối quan hệ lợi ích.',
+            ref: 'Mục III.1. Chức năng nhận thức'
+          },
+          {
+            id: 'c1_vd9', type: 'van_dung',
+            text: 'Đại dịch Covid-19 làm đứt gãy chuỗi cung ứng toàn cầu. Từ góc độ đối tượng nghiên cứu của KTCT, điều này tác động trực tiếp đến khâu nào?',
+            options: ['Phân phối và Tiêu dùng', 'Sản xuất và Lưu thông (Trao đổi)', 'Sở hữu tư liệu sản xuất', 'Kiến trúc thượng tầng'],
+            correct: 1,
+            explanation: 'ĐÚNG: Đứt gãy chuỗi cung ứng là sự ngưng trệ trong "lưu thông/trao đổi", từ đó ảnh hưởng đình đốn tới quá trình sản xuất.',
+            ref: 'Mục II.1 (Mối quan hệ SX và trao đổi)'
+          },
+          {
+            id: 'c1_vd10', type: 'van_dung',
+            text: 'Sự xuất hiện của "Kinh tế chia sẻ" (Grab, Airbnb) minh chứng cho nguyên lý nào dưới góc độ KTCT Mác - Lênin?',
+            options: ['Lực lượng sản xuất (công nghệ số) phát triển kéo theo sự biến đổi của quan hệ xã hội trong sản xuất và trao đổi', 'Quy luật kinh tế đã biến mất', 'Chủ nghĩa Mác không còn tác dụng', 'Lợi ích kinh tế không còn tồn tại'],
+            correct: 0,
+            explanation: 'ĐÚNG: Công nghệ app là bước tiến LLSX mới, làm thay đổi quan hệ tổ chức trao đổi và sở hữu giữa các chủ thể.',
+            ref: 'Mục II.1. Đối tượng nghiên cứu'
+          }
+        ]
+      },
+      { id: 2, title: "Chương 2: Hàng hóa, thị trường và các chủ thể (Đang chờ nạp...)", summary: ["Gõ 'tiếp chương 2' để mở khóa"], questions: [] },
+      { id: 3, title: "Chương 3: Giá trị thặng dư (Đang chờ nạp...)", summary: [], questions: [] },
+      { id: 4, title: "Chương 4: Cạnh tranh và Độc quyền (Đang chờ nạp...)", summary: [], questions: [] },
+      { id: 5, title: "Chương 5: KTTT định hướng XHCN (Đang chờ nạp...)", summary: [], questions: [] },
+      { id: 6, title: "Chương 6: CNH, HĐH và Hội nhập (Đang chờ nạp...)", summary: [], questions: [] }
+    ];
+
+    const shuffleArray = (array) => [...array].sort(() => Math.random() - 0.5);
+
+    const determineDifficultyConfig = (goal) => {
+      switch(goal) {
+        case 'Pass': return { total: 10, nb: 6, h: 4, vd: 0 };
+        case 'C': case 'C+': return { total: 15, nb: 7, h: 5, vd: 3 };
+        case 'B': case 'B+': return { total: 20, nb: 8, h: 7, vd: 5 };
+        case 'A': return { total: 25, nb: 10, h: 8, vd: 7 };
+        case 'A+': return { total: 30, nb: 10, h: 10, vd: 10 };
+        default: return { total: 10, nb: 5, h: 5, vd: 0 };
+      }
+    };
+
+    const generateRoadmap = (timeframe, goal) => {
+      const roadmap = [];
+      const chaptersToDistribute = CHAPTERS_DATA.filter(ch => ch.questions.length > 0);
+      
+      for (let i = 1; i <= timeframe; i++) {
+        const chapterIndex = (i - 1) % chaptersToDistribute.length;
+        const chapter = chaptersToDistribute[chapterIndex];
+        if(!chapter) break;
+
+        const config = determineDifficultyConfig(goal);
+        const nbQs = chapter.questions.filter(q => q.type === 'nhan_biet');
+        const hQs = chapter.questions.filter(q => q.type === 'hieu');
+        const vdQs = chapter.questions.filter(q => q.type === 'van_dung');
+
+        const selectedQs = [
+          ...shuffleArray(nbQs).slice(0, config.nb),
+          ...shuffleArray(hQs).slice(0, config.h),
+          ...shuffleArray(vdQs).slice(0, config.vd)
+        ];
+
+        roadmap.push({
+          day: i,
+          chapterId: chapter.id,
+          title: `Ngày ${i}: ${chapter.title.split(':')[0]}`,
+          summary: chapter.summary,
+          status: i === 1 ? 'open' : 'locked',
+          questions: shuffleArray(selectedQs),
+          estimatedTime: Math.round(selectedQs.length * 1.5)
+        });
+      }
+      return roadmap;
+    };
+
+    function App() {
+      const [appState, setAppState] = useState('onboarding_time'); 
+      const [timeframe, setTimeframe] = useState(null);
+      const [customDays, setCustomDays] = useState('');
+      const [goal, setGoal] = useState(null);
+      const [roadmap, setRoadmap] = useState([]);
+      const [currentDayIndex, setCurrentDayIndex] = useState(0);
+      
+      // Game stats
+      const [xp, setXp] = useState(0);
+      const [streak, setStreak] = useState(0);
+      const [mistakes, setMistakes] = useState([]);
+      
+      // Quiz stats
+      const [quizContext, setQuizContext] = useState({ type: 'normal' });
+      const [quizQuestions, setQuizQuestions] = useState([]);
+      const [qIndex, setQIndex] = useState(0);
+      const [selectedOpt, setSelectedOpt] = useState(null);
+      const [isAnswered, setIsAnswered] = useState(false);
+      const [dayStats, setDayStats] = useState({ correct: 0, wrong: 0, timeStart: 0, timeEnd: 0, mistakes: [] });
+
+      const handleGenerateRoadmap = (selectedGoal) => {
+        setGoal(selectedGoal);
+        const days = timeframe || parseInt(customDays) || 7;
+        const generated = generateRoadmap(days, selectedGoal);
+        setRoadmap(generated);
+        setAppState('roadmap');
+      };
+
+      const startDay = (index) => {
+        setCurrentDayIndex(index);
+        setAppState('day_summary');
+      };
+
+      const startQuiz = (type = 'normal') => {
+        setQuizContext({ type });
+        if (type === 'normal') {
+          setQuizQuestions(roadmap[currentDayIndex].questions);
+        } else if (type === 'retry_day') {
+          setQuizQuestions(dayStats.mistakes);
+        } else if (type === 'retry_all') {
+          setQuizQuestions(mistakes);
+        }
+        
+        setQIndex(0);
+        setSelectedOpt(null);
+        setIsAnswered(false);
+        setDayStats({ correct: 0, wrong: 0, timeStart: Date.now(), timeEnd: 0, mistakes: [] });
+        setAppState('quiz');
+      };
+
+      const handleAnswer = (optIndex) => {
+        if (isAnswered) return;
+        setSelectedOpt(optIndex);
+        setIsAnswered(true);
+
+        const currentQ = quizQuestions[qIndex];
+        const isCorrect = optIndex === currentQ.correct;
+
+        if (isCorrect) {
+          setXp(prev => prev + (quizContext.type === 'normal' ? 10 : 5));
+          setDayStats(prev => ({ ...prev, correct: prev.correct + 1 }));
+          
+          if (quizContext.type === 'retry_all' || quizContext.type === 'retry_day') {
+            setMistakes(prev => prev.filter(m => m.id !== currentQ.id));
+          }
+        } else {
+          setDayStats(prev => ({ ...prev, wrong: prev.wrong + 1, mistakes: [...prev.mistakes, currentQ] }));
+          if (!mistakes.find(m => m.id === currentQ.id)) {
+            setMistakes(prev => [...prev, currentQ]);
+          }
+        }
+      };
+
+      const handleNextQuestion = () => {
+        if (qIndex < quizQuestions.length - 1) {
+          setQIndex(qIndex + 1);
+          setSelectedOpt(null);
+          setIsAnswered(false);
+        } else {
+          setDayStats(prev => ({ ...prev, timeEnd: Date.now() }));
+          if (quizContext.type === 'normal') {
+            setXp(prev => prev + 50);
+            setStreak(prev => prev + 1);
+            
+            const newRoadmap = [...roadmap];
+            newRoadmap[currentDayIndex].status = 'done';
+            if (currentDayIndex + 1 < newRoadmap.length) {
+              newRoadmap[currentDayIndex + 1].status = 'open';
+            }
+            setRoadmap(newRoadmap);
+          }
+          setAppState('day_complete');
+        }
+      };
+
+      const goHome = () => {
+        if (appState === 'quiz') {
+          const confirmExit = window.confirm("Bạn đang làm dở quiz, nếu thoát bây giờ kết quả của vòng này sẽ không được lưu. Bạn có chắc không?");
+          if (!confirmExit) return;
+        }
+        setAppState('roadmap');
+      };
+
+      const TopBar = () => (
+        <div className="flex justify-between items-center px-4 py-3 bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-pink-100 shadow-sm max-w-2xl mx-auto w-full">
+          <button onClick={goHome} className="flex items-center gap-2 text-pink-500 font-bold hover:bg-pink-50 px-3 py-1.5 rounded-xl transition text-sm">
+            🏠 Lộ trình
+          </button>
+          <div className="flex gap-4 font-bold text-sm">
+            <span className="flex items-center gap-1 text-amber-500 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
+              ⭐ {xp} XP
+            </span>
+            <span className="flex items-center gap-1 text-orange-500 bg-orange-50 px-3 py-1 rounded-full border border-orange-200">
+              🔥 {streak}
+            </span>
+          </div>
+        </div>
+      );
+
+      const renderOnboardingTime = () => (
+        <div className="min-h-screen flex flex-col items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white p-8 rounded-3xl shadow-xl max-w-md w-full text-center relative border border-pink-100">
+            <div className="text-5xl mb-3">🐰</div>
+            <h1 className="text-2xl font-extrabold text-slate-800 mb-2">Hành Trình KTCT</h1>
+            <p className="text-slate-500 mb-6 text-sm">Bạn muốn chinh phục môn Kinh tế chính trị Mác - Lênin trong bao lâu?</p>
+            
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              {[7, 14, 21, 30].map(days => (
+                <button key={days} onClick={() => { setTimeframe(days); setAppState('onboarding_goal'); }}
+                  className="py-3.5 rounded-2xl border-2 border-pink-100 bg-pink-50/40 hover:bg-pink-500 hover:text-white hover:border-pink-500 text-pink-600 font-bold transition transform active:scale-95 shadow-sm">
+                  {days} Ngày
+                </button>
+              ))}
+            </div>
+
+            <div className="pt-2 border-t border-slate-100">
+              <label className="text-xs text-slate-400 block mb-2 font-medium">Hoặc tự chọn số ngày của bạn:</label>
+              <div className="flex gap-2">
+                <input 
+                  type="number" 
+                  min="1" 
+                  max="90" 
+                  placeholder="Nhập số ngày..." 
+                  value={customDays} 
+                  onChange={(e) => setCustomDays(e.target.value)}
+                  className="flex-1 px-4 py-2.5 rounded-xl border-2 border-pink-100 focus:border-pink-500 outline-none text-sm font-semibold"
+                />
+                <button 
+                  disabled={!customDays || parseInt(customDays) <= 0}
+                  onClick={() => { setTimeframe(parseInt(customDays)); setAppState('onboarding_goal'); }}
+                  className="px-5 py-2.5 rounded-xl bg-pink-500 text-white font-bold text-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-pink-600 transition shadow-md shadow-pink-200">
+                  Tiếp tục
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+
+      const renderOnboardingGoal = () => (
+        <div className="min-h-screen flex flex-col items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white p-8 rounded-3xl shadow-xl max-w-md w-full border border-pink-100">
+            <button onClick={() => setAppState('onboarding_time')} className="text-slate-400 hover:text-pink-500 mb-3 text-xs font-bold flex items-center gap-1 transition">
+              ← Quay lại
+            </button>
+            <h1 className="text-2xl font-extrabold text-slate-800 mb-1">Mục tiêu điểm số</h1>
+            <p className="text-slate-500 mb-6 text-xs leading-relaxed">
+              Thuật toán Adaptive Difficulty sẽ tự căn chỉnh tỷ lệ câu Nhận biết, Hiểu và Vận dụng phù hợp nhất.
+            </p>
+            
+            <div className="flex flex-col gap-2.5">
+              {[
+                { g: 'Pass', desc: 'Qua môn an toàn (~10 câu/ngày)' },
+                { g: 'C+', desc: 'Mục tiêu Khá (~15 câu/ngày)' },
+                { g: 'B+', desc: 'Mục tiêu Giỏi (~20 câu/ngày)' },
+                { g: 'A', desc: 'Mục tiêu Xuất sắc (~25 câu/ngày)' },
+                { g: 'A+', desc: 'Thủ khoa toàn năng (Đủ 30 câu/ngày)' }
+              ].map(item => (
+                <button key={item.g} onClick={() => handleGenerateRoadmap(item.g)}
+                  className="p-3.5 rounded-2xl border-2 border-pink-100 bg-white hover:border-pink-400 hover:bg-pink-50/50 text-left flex justify-between items-center transition group">
+                  <span className="font-extrabold text-slate-800 group-hover:text-pink-600">Điểm {item.g}</span>
+                  <span className="text-xs text-slate-400 font-medium">{item.desc}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+
+      const renderRoadmap = () => {
+        const totalDone = roadmap.filter(d => d.status === 'done').length;
+        const progress = Math.round((totalDone / roadmap.length) * 100) || 0;
+
+        return (
+          <div className="min-h-screen flex flex-col animate-fade-in">
+            <TopBar />
+            <div className="flex-1 max-w-2xl w-full mx-auto p-4 py-6">
+              
+              {/* Mistake Notebook Card */}
+              <div onClick={() => mistakes.length > 0 && setAppState('mistake_notebook')}
+                className={`bg-gradient-to-r from-rose-400 to-pink-500 rounded-3xl p-5 text-white shadow-lg mb-6 relative overflow-hidden transition transform hover:-translate-y-0.5 ${mistakes.length > 0 ? 'cursor-pointer' : 'opacity-90'}`}>
+                <div className="relative z-10 flex justify-between items-center">
+                  <div>
+                    <h2 className="text-lg font-bold flex items-center gap-2">📓 Sổ tay câu sai</h2>
+                    <p className="text-pink-100 text-xs mt-1">
+                      {mistakes.length > 0 ? `Đang có ${mistakes.length} câu cần khắc phục để lấy lại điểm.` : 'Chưa có câu sai nào! Phong độ rất tuyệt.'}
+                    </p>
+                  </div>
+                  {mistakes.length > 0 && (
+                    <button className="px-3.5 py-1.5 bg-white text-pink-600 text-xs font-extrabold rounded-xl shadow-sm">
+                      Luyện ngay
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Roadmap Progress Overview */}
+              <div className="bg-white p-5 rounded-3xl border border-pink-100 shadow-sm mb-6">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="font-bold text-sm text-slate-700">Tiến độ chinh phục</span>
+                  <span className="text-pink-600 font-extrabold text-sm">{progress}%</span>
+                </div>
+                <div className="h-3 w-full bg-pink-100 rounded-full overflow-hidden">
+                  <div className="h-full bg-pink-500 transition-all duration-700 rounded-full" style={{ width: `${progress}%` }}></div>
+                </div>
+              </div>
+
+              {/* Roadmap Days */}
+              <div className="space-y-3.5">
+                {roadmap.map((day, idx) => (
+                  <div key={idx} className="bg-white p-4 rounded-3xl border border-pink-100 shadow-sm flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-2xl flex items-center justify-center font-bold text-sm shrink-0
+                        ${day.status === 'done' ? 'bg-emerald-500 text-white' : 
+                          day.status === 'open' ? 'bg-pink-500 text-white shadow-md shadow-pink-200' : 'bg-slate-100 text-slate-400'}`}>
+                        {day.status === 'done' ? '✓' : idx + 1}
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-sm text-slate-800">{day.title}</h3>
+                        <p className="text-xs text-slate-400 mt-0.5">{day.questions.length} câu • ~{day.estimatedTime} phút</p>
+                      </div>
+                    </div>
+
+                    <button 
+                      onClick={() => day.status !== 'locked' && startDay(idx)}
+                      disabled={day.status === 'locked'}
+                      className={`px-4 py-2 rounded-xl text-xs font-bold transition shrink-0 ${
+                        day.status === 'locked' ? 'bg-slate-100 text-slate-400 cursor-not-allowed' :
+                        day.status === 'done' ? 'bg-pink-50 text-pink-600 hover:bg-pink-100' :
+                        'bg-pink-500 text-white hover:bg-pink-600 shadow-md shadow-pink-200'
+                      }`}>
+                      {day.status === 'done' ? 'Làm lại' : day.status === 'open' ? 'Bắt đầu' : 'Khóa'}
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+            </div>
+          </div>
+        );
+      };
+
+      const renderDaySummary = () => {
+        const day = roadmap[currentDayIndex];
+        return (
+          <div className="min-h-screen flex flex-col animate-fade-in">
+            <TopBar />
+            <div className="flex-1 max-w-xl w-full mx-auto p-4 py-6 flex flex-col">
+              <div className="bg-white rounded-3xl shadow-sm border border-pink-100 p-6 flex-1 flex flex-col">
+                <h1 className="text-xl font-extrabold text-slate-800 mb-4 pb-3 border-b border-pink-100">
+                  Tóm tắt cốt lõi: {day.title}
+                </h1>
+                <div className="space-y-3 mb-6 flex-1">
+                  {day.summary.map((point, i) => (
+                    <div key={i} className="flex gap-3 text-sm text-slate-700 bg-pink-50/40 p-3 rounded-2xl border border-pink-100">
+                      <span className="text-pink-500 font-bold shrink-0">🐰</span>
+                      <span>{point}</span>
+                    </div>
+                  ))}
+                </div>
+                <button onClick={() => startQuiz('normal')}
+                  className="w-full py-3.5 rounded-2xl bg-pink-500 text-white font-bold text-sm hover:bg-pink-600 transition shadow-lg shadow-pink-200 active:scale-95">
+                  Bắt đầu làm Quiz ({day.questions.length} câu)
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      const renderQuiz = () => {
+        const q = quizQuestions[qIndex];
+        return (
+          <div className="min-h-screen flex flex-col bg-slate-50 animate-fade-in">
+            <div className="p-4 bg-white border-b border-slate-100 flex justify-between items-center sticky top-0 z-20">
+              <button onClick={goHome} className="text-slate-400 hover:text-slate-600 text-xs font-bold px-2 py-1">
+                ✕ Thoát
+              </button>
+              <div className="flex items-center gap-3">
+                <div className="w-28 h-2 bg-slate-100 rounded-full overflow-hidden">
+                  <div className="h-full bg-pink-500 transition-all duration-300" style={{width: `${((qIndex + 1) / quizQuestions.length) * 100}%`}}></div>
+                </div>
+                <span className="text-xs font-extrabold text-slate-500">{qIndex + 1}/{quizQuestions.length}</span>
+              </div>
+            </div>
+
+            <div className="flex-1 max-w-xl w-full mx-auto p-4 py-6 flex flex-col">
+              <div className="mb-3">
+                <span className={`text-[11px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider
+                  ${q.type === 'nhan_biet' ? 'bg-emerald-100 text-emerald-700' : 
+                    q.type === 'hieu' ? 'bg-sky-100 text-sky-700' : 'bg-amber-100 text-amber-700'}`}>
+                  {q.type.replace('_', ' ')}
+                </span>
+              </div>
+              
+              <h2 className="text-base sm:text-lg font-bold text-slate-800 mb-6 leading-snug">{q.text}</h2>
+
+              <div className="space-y-2.5 flex-1">
+                {q.options.map((opt, i) => {
+                  let btnClass = "w-full text-left p-4 rounded-2xl border-2 text-sm font-medium transition-all ";
+                  if (!isAnswered) {
+                    btnClass += "border-white bg-white hover:border-pink-300 hover:bg-pink-50/40 text-slate-700 shadow-sm";
+                  } else {
+                    if (i === q.correct) {
+                      btnClass += "border-emerald-500 bg-emerald-50 text-emerald-800 font-semibold";
+                    } else if (i === selectedOpt) {
+                      btnClass += "border-rose-500 bg-rose-50 text-rose-800 font-semibold";
+                    } else {
+                      btnClass += "border-transparent bg-white/50 text-slate-400 opacity-60";
+                    }
+                  }
+
+                  return (
+                    <button key={i} disabled={isAnswered} onClick={() => handleAnswer(i)} className={btnClass}>
+                      <span className="font-bold mr-2 text-pink-600">{['A', 'B', 'C', 'D'][i]}.</span> {opt}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {isAnswered && (
+                <div className="mt-6 animate-fade-in-up">
+                  <div className={`p-4 rounded-2xl ${selectedOpt === q.correct ? 'bg-emerald-50 border border-emerald-200 text-emerald-900' : 'bg-rose-50 border border-rose-200 text-rose-900'}`}>
+                    <h3 className="font-extrabold text-sm mb-1 flex items-center gap-1.5">
+                      {selectedOpt === q.correct ? '🎉 Rất chính xác!' : '🥲 Chưa đúng rồi!'}
+                    </h3>
+                    <p className="text-xs leading-relaxed mb-2">{q.explanation}</p>
+                    <p className="text-[11px] font-semibold opacity-70">📍 {q.ref}</p>
+                  </div>
+                  <button onClick={handleNextQuestion} className="w-full py-3.5 mt-3 bg-pink-500 text-white font-bold text-sm rounded-2xl shadow-lg shadow-pink-200 hover:bg-pink-600 transition active:scale-95">
+                    {qIndex < quizQuestions.length - 1 ? 'Câu tiếp theo ➔' : 'Xem tổng kết vòng thi 🎉'}
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      };
+
+      const renderQuestCompleted = () => {
+        const accuracy = Math.round((dayStats.correct / quizQuestions.length) * 100) || 0;
+        const timeSpent = Math.max(1, Math.round((dayStats.timeEnd - dayStats.timeStart) / 60000));
+
+        return (
+          <div className="min-h-screen flex flex-col items-center justify-center p-4 animate-fade-in">
+            <div className="bg-white p-8 rounded-3xl shadow-xl max-w-md w-full text-center border border-pink-100">
+              <div className="text-5xl mb-3">🏆</div>
+              <h1 className="text-2xl font-black text-slate-800 uppercase tracking-wide">Hoàn Thành!</h1>
+              <p className="text-slate-500 text-xs mb-6 font-medium">Bạn đã nỗ lực rất xuất sắc.</p>
+              
+              <div className="grid grid-cols-2 gap-3 mb-6">
+                <div className="bg-emerald-50 border border-emerald-100 p-3.5 rounded-2xl">
+                  <div className="text-xl font-black text-emerald-600">{accuracy}%</div>
+                  <div className="text-[10px] text-emerald-800 font-bold uppercase">Độ chính xác</div>
+                </div>
+                <div className="bg-sky-50 border border-sky-100 p-3.5 rounded-2xl">
+                  <div className="text-xl font-black text-sky-600">{timeSpent}p</div>
+                  <div className="text-[10px] text-sky-800 font-bold uppercase">Thời gian</div>
+                </div>
+                <div className="bg-amber-50 border border-amber-100 p-3.5 rounded-2xl">
+                  <div className="text-xl font-black text-amber-600">+{dayStats.correct * 10 + (quizContext.type==='normal'?50:0)}</div>
+                  <div className="text-[10px] text-amber-800 font-bold uppercase">XP Nhận được</div>
+                </div>
+                <div className="bg-rose-50 border border-rose-100 p-3.5 rounded-2xl">
+                  <div className="text-xl font-black text-rose-600">{dayStats.wrong}</div>
+                  <div className="text-[10px] text-rose-800 font-bold uppercase">Câu sai</div>
+                </div>
+              </div>
+
+              <div className="space-y-2.5">
+                {dayStats.wrong > 0 && (
+                  <button onClick={() => startQuiz('retry_day')} className="w-full py-3 rounded-xl font-bold text-xs bg-rose-100 text-rose-600 hover:bg-rose-200 transition">
+                    Luyện lại ngay {dayStats.wrong} câu sai
+                  </button>
+                )}
+                {quizContext.type === 'normal' && currentDayIndex + 1 < roadmap.length && (
+                  <button onClick={() => startDay(currentDayIndex + 1)} className="w-full py-3 rounded-xl font-bold text-xs bg-pink-500 text-white hover:bg-pink-600 shadow-md shadow-pink-200 transition">
+                    Mở ngày tiếp theo 🚀
+                  </button>
+                )}
+                <button onClick={goHome} className="w-full py-3 rounded-xl font-bold text-xs border border-slate-200 text-slate-600 hover:bg-slate-50 transition">
+                  Quay về lộ trình
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      const renderMistakeNotebook = () => (
+        <div className="min-h-screen flex flex-col animate-fade-in">
+          <TopBar />
+          <div className="flex-1 max-w-xl w-full mx-auto p-4 py-8 flex flex-col items-center justify-center text-center">
+            <div className="bg-white rounded-3xl border border-pink-100 shadow-sm p-8 w-full">
+              <div className="text-5xl mb-4">📓</div>
+              <h1 className="text-2xl font-bold text-slate-800 mb-2">Sổ tay câu sai</h1>
+              <p className="text-slate-500 text-xs mb-6 leading-relaxed">
+                Bạn đang có <b>{mistakes.length}</b> câu hỏi cần chinh phục lại. Mỗi câu trả lời đúng sẽ được xóa khỏi sổ tay và thưởng +5 XP.
+              </p>
+              <button onClick={() => startQuiz('retry_all')}
+                className="w-full py-3.5 rounded-2xl bg-pink-500 text-white font-bold text-sm shadow-lg shadow-pink-200 hover:bg-pink-600 transition">
+                Bắt đầu luyện tập câu sai
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+
+      return (
+        <div className="min-h-screen">
+          {appState === 'onboarding_time' && renderOnboardingTime()}
+          {appState === 'onboarding_goal' && renderOnboardingGoal()}
+          {appState === 'roadmap' && renderRoadmap()}
+          {appState === 'day_summary' && renderDaySummary()}
+          {appState === 'quiz' && renderQuiz()}
+          {appState === 'day_complete' && renderQuestCompleted()}
+          {appState === 'mistake_notebook' && renderMistakeNotebook()}
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
